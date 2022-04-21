@@ -1,0 +1,44 @@
+.container {
+    background: #1C1C21;
+    width: 100%;
+}
+.header {
+    max-width: 1280px;
+    background: #1C1C21;
+    display: flex;
+    flex-direction: row;
+    height: 88px;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    box-sizing: border-box;
+}
+.ingredients {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.logo {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.profile {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+.headerItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: min-content;
+    padding: 16px 0;
+}
+.icons {
+    align-self: center;
+}
+.text {
+
+}

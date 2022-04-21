@@ -1,0 +1,107 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 40px;
+    max-width: 600px;
+    width: 33.48vw;
+    min-width: 600px;
+}
+
+.tabPanel {
+    display: flex;
+    margin: 20px 0 8px 0;
+}
+
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+@media (max-width: 1672px) {
+    .tab > div {
+        display: flex;
+        min-width: unset;
+    }
+
+    .container {
+        min-width: 420px;
+    }
+
+    .tabPanel {
+        margin: 20px auto 8px auto;
+    }
+
+    .wrap {
+        justify-content: center;
+    }
+}
+
+.image {
+    width: 240px;
+    height: 120px;
+}
+
+.ingredientPrice {
+    display: flex;
+    margin: 4px auto 4px auto;
+}
+
+.ingredientInfo {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 272px;
+    height: 208px;
+    margin: 24px 12px 40px 12px;
+}
+
+.ingredientInfo > p {
+    text-align: center;
+}
+
+.ingredientsContainer {
+    overflow-y: scroll;
+    margin-top: 40px;
+    padding-right: 8px;
+    max-height: 100%;
+}
+
+.ingredient {
+    cursor: pointer;
+    display: flex;
+    position: relative;
+    width: 272px;
+}
+
+.ingredientsContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ingredientsContainer::-webkit-scrollbar-track {
+    background: #2F2F37;
+}
+
+.ingredientsContainer::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    height: 492px;
+}
+
+@media (max-height: 1000px) {
+    .ingredientsContainer::-webkit-scrollbar-thumb {
+        background: #8585AD;
+        height: 400px;
+    }
+}
+
+@media (max-height: 900px) {
+    .ingredientsContainer::-webkit-scrollbar-thumb {
+        height: 300px;
+    }
+}
+
+@media (max-height: 800px) {
+    .ingredientsContainer::-webkit-scrollbar-thumb {
+        height: 200px;
+    }
+}
