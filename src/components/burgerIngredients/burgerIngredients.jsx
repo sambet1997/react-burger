@@ -62,19 +62,17 @@ const BurgerIngredients = ({ compound, setCompound }) => {
               </div>
             )}
             <div className={styles.fillings}>
-              {[...compound.sauces, ...compound.fillings].map((item, index) => (
-                <div className={styles.constructor} key={index}>
+              {[...compound.sauces, ...compound.fillings].map((item) => (
+                <div className={styles.constructor} key={item.index}>
                   <div className="mr-2">
                     <DragIcon type="primary" />
                   </div>
-                  <div className={styles.constructorElement}>
-                    <ConstructorElement
-                      text={item.name}
-                      price={item.price}
-                      thumbnail={item.image}
-                      handleClose={handleDelete(item)}
-                    />
-                  </div>
+                  <ConstructorElement
+                    text={item.name}
+                    price={item.price}
+                    thumbnail={item.image}
+                    handleClose={handleDelete(item)}
+                  />
                 </div>
               ))}
             </div>
