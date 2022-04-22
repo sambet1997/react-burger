@@ -107,11 +107,6 @@ const BurgerIngredients = ({ compound, setCompound }) => {
   );
 };
 
-BurgerIngredients.defaultProps = {
-  compound: {},
-  setCompound: () => {},
-};
-
 BurgerIngredients.propTypes = {
   compound: PropTypes.instanceOf(Object).isRequired,
   setCompound: PropTypes.func.isRequired,

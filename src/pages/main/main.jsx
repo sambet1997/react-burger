@@ -26,10 +26,6 @@ const Main = ({ ingredients }) => {
   );
 };
 
-Main.defaultProps = {
-  ingredients: [],
-};
-
 Main.propTypes = {
   ingredients: PropTypes.array.isRequired,
 };

@@ -135,12 +135,6 @@ const BurgerConstructor = ({ ingredients, compound, setCompound }) => {
   );
 };
 
-BurgerConstructor.defaultProps = {
-  ingredients: {},
-  compound: {},
-  setCompound: () => {},
-};
-
 BurgerConstructor.propTypes = {
   ingredients: PropTypes.instanceOf(Object).isRequired,
   compound: PropTypes.instanceOf(Object).isRequired,
