@@ -1,113 +1,142 @@
-import React from "react";
 import {
-  Button,
-  ConstructorElement,
+  Counter,
   CurrencyIcon,
-  DragIcon,
+  Tab,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+import React from "react";
 import styles from "./burgerIngredients.module.css";
 import PropTypes from "prop-types";
 
-const BurgerIngredients = ({ compound, setCompound }) => {
-  function totalPrice(obj, key) {
-    let fieldIterator = JSON.stringify(obj).matchAll(
-      '(?<="' + key + '":)[0-9]*'
-    );
-    let it = fieldIterator.next(),
-      result = 0;
-    while (!it.done) {
-      result += it.value[0] - 0;
-      it = fieldIterator.next();
+const BurgerIngredients = ({ ingredients, compound, setCompound }) => {
+  const [current, setCurrent] = React.useState("one");
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    if (ingredients) {
+      setData([
+        {
+          key: "buns",
+          title: "Булки",
+          data: ingredients.filter((item) => item.type === "bun"),
+        },
+
+        {
+          key: "sauces",
+          title: "Соусы",
+          data: ingredients.filter((item) => item.type === "sauce"),
+        },
+
+        {
+          key: "fillings",
+          title: "Начинки",
+          data: ingredients.filter((item) => item.type === "main"),
+        },
+      ]);
     }
-    return result;
-  }
+  }, [ingredients]);
 
-  const handleDelete = (item) => () => {
+  React.useEffect(() => {
+    setCompound(compound);
+  }, [compound, setCompound]);
+
+  const onClickHandler = (ingredients, currentIngredient) => () => {
     setCompound({
-      buns: compound.buns,
-
-      sauces: [...compound.sauces].filter(
-        (ingredient) => ingredient.index !== item.index
-      ),
-      fillings: [...compound.fillings].filter(
-        (ingredient) => ingredient.index !== item.index
-      ),
+      ...compound,
+      [ingredients.key]:
+        ingredients.key === "buns"
+          ? {
+              ...currentIngredient,
+              price: currentIngredient.price * 2,
+            }
+          : compound[ingredients.key].concat({
+              ...currentIngredient,
+              index: `${compound[ingredients.key].length}-${
+                currentIngredient._id
+              }`,
+            }),
     });
   };
+
+  const counter = (currentIngredient) => {
+    if (
+      currentIngredient.type === "bun" &&
+      compound.buns._id === currentIngredient._id
+    ) {
+      return 1;
+    }
+    if (currentIngredient.type !== "bun") {
+      return [...compound.sauces, ...compound.fillings].filter(
+        (item) => item._id === currentIngredient._id
+      ).length;
+    }
+    return 0;
+  };
+
   return (
     <div className={styles.container}>
-      {!compound.buns._id &&
-        !compound.sauces.length &&
-        !compound.fillings.length && (
-          <p className={`text text_type_main-large ${styles.noCompoundText}`}>
-            Вы не выбрали ни одного ингредиента
-          </p>
-        )}
-      {!!(
-        compound.buns._id ||
-        compound.sauces.length ||
-        compound.fillings.length
-      ) && (
-        <>
-          <div className={styles.constructorsContainer}>
-            {compound && compound.buns && compound.buns._id && (
-              <div className={styles.buns}>
-                <ConstructorElement
-                  type="top"
-                  isLocked={true}
-                  text={`${compound.buns.name} (верх)`}
-                  price={compound.buns.price / 2}
-                  thumbnail={compound.buns.image}
-                />
-              </div>
-            )}
-            <div className={styles.fillings}>
-              {[...compound.sauces, ...compound.fillings].map((item) => (
-                <div className={styles.constructor} key={item.index}>
-                  <div className="mr-2">
-                    <DragIcon type="primary" />
+      <p className="text text_type_main-large">Соберите бургер</p>
+      <div className={styles.tabPanel}>
+        <a className={styles.tab} href="#buns">
+          <Tab value="one" active={current === "one"} onClick={setCurrent}>
+            Булки
+          </Tab>
+        </a>
+        <a className={styles.tab} href="#sauces">
+          <Tab value="two" active={current === "two"} onClick={setCurrent}>
+            Соусы
+          </Tab>
+        </a>
+        <a className={styles.tab} href="#fillings">
+          <Tab value="three" active={current === "three"} onClick={setCurrent}>
+            Начинки
+          </Tab>
+        </a>
+      </div>
+      <div className={styles.ingredientsContainer}>
+        {data.map((ingredients) => (
+          <React.Fragment key={ingredients.key}>
+            <p id={ingredients.key} className="text text_type_main-medium mb-6">
+              {ingredients.title}
+            </p>
+            <div className={styles.wrap}>
+              {ingredients.data.map((currentIngredient) => (
+                <div
+                  onClick={onClickHandler(ingredients, currentIngredient)}
+                  className={styles.ingredient}
+                  key={currentIngredient._id}
+                >
+                  <div className={styles.ingredientInfo}>
+                    <Counter
+                      count={counter(currentIngredient)}
+                      size="default"
+                    />
+                    <img
+                      alt={""}
+                      className={styles.image}
+                      src={currentIngredient.image}
+                    />
+                    <div className={styles.ingredientPrice}>
+                      <p className="text text_type_digits-default mr-1">
+                        {currentIngredient.price}
+                      </p>
+                      <CurrencyIcon type="primary" />
+                    </div>
+                    <p className="text text_type_main-default">
+                      {currentIngredient.name}
+                    </p>
                   </div>
-                  <ConstructorElement
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image}
-                    handleClose={handleDelete(item)}
-                  />
                 </div>
               ))}
             </div>
-            {compound && compound.buns && compound.buns._id && (
-              <div className={styles.buns}>
-                <ConstructorElement
-                  type="bottom"
-                  isLocked={true}
-                  text={`${compound.buns.name} (низ)`}
-                  price={compound.buns.price / 2}
-                  thumbnail={compound.buns.image}
-                />
-              </div>
-            )}
-          </div>
-          <div className={styles.order}>
-            <div className={styles.price}>
-              <p className="text text_type_digits-medium mr-2">
-                {totalPrice(compound, "price")}
-              </p>
-              <div className={styles.logo}>
-                <CurrencyIcon type="primary" />
-              </div>
-            </div>
-            <Button type="primary" size="large">
-              Оформить заказ
-            </Button>
-          </div>
-        </>
-      )}
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 };
 
 BurgerIngredients.propTypes = {
+  ingredients: PropTypes.instanceOf(Object).isRequired,
   compound: PropTypes.instanceOf(Object).isRequired,
   setCompound: PropTypes.func.isRequired,
 };

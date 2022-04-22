@@ -1,6 +1,6 @@
 import React from "react";
-import BurgerConstructor from "../../components/burgerConstructor/burgerConstructor";
 import BurgerIngredients from "../../components/burgerIngredients/burgerIngredients";
+import BurgerConstructor from "../../components/burgerConstructor/burgerConstructor";
 import styles from "./main.module.css";
 import PropTypes from "prop-types";
 
@@ -12,12 +12,12 @@ const Main = ({ ingredients }) => {
   });
   return (
     <div className={styles.container}>
-      <BurgerConstructor
+      <BurgerIngredients
         compound={compound}
         setCompound={setCompound}
         ingredients={ingredients}
       />
-      <BurgerIngredients
+      <BurgerConstructor
         compound={compound}
         setCompound={setCompound}
         ingredients={ingredients}

@@ -1,88 +1,111 @@
 .container {
     display: flex;
     flex-direction: column;
-    margin-right: 40px;
-    max-width: 600px;
-    width: 33.48vw;
-    min-width: 600px;
-}
-
-.tabPanel {
-    display: flex;
-    margin: 20px 0 8px 0;
-}
-
-.wrap {
-    display: flex;
-    flex-wrap: wrap;
+    width: 600px;
     justify-content: space-between;
+    margin-top: 100px;
+    margin-right: 16px;
+    max-width: 608px;
 }
 
-.image {
-    width: 240px;
-    height: 120px;
-}
-
-.ingredientPrice {
-    display: flex;
-    margin: 4px auto 4px auto;
-}
-
-.ingredientInfo {
-    align-items: center;
+.constructorsContainer {
+    max-height: calc(100% - 90px);
     display: flex;
     flex-direction: column;
-    width: 272px;
-    height: 208px;
-    margin: 24px 12px 40px 12px;
+    gap: 10px;
+    align-items: flex-end;
 }
 
-.ingredientInfo > p {
-    text-align: center;
-}
-
-.ingredientsContainer {
-    overflow-y: scroll;
-    margin-top: 40px;
-    padding-right: 8px;
-    max-height: 100%;
-}
-
-.ingredient {
-    cursor: pointer;
+.constructor {
     display: flex;
-    position: relative;
-    width: 272px;
+    align-items: center;
+    margin: 8px 0;
 }
 
-.ingredientsContainer::-webkit-scrollbar {
+.order {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.price {
+    align-items: center;
+    display: flex;
+}
+
+.logo {
+    display: flex;
+}
+
+.logo > svg {
+    width: 33px;
+    height: 33px;
+    margin-right: 40px;
+}
+
+.buns {
+    padding-right: 16px;
+}
+
+.buns:first-child {
+    margin-top: 8px;
+}
+
+.buns:last-child {
+    margin-bottom: -8px;
+}
+
+.fillings {
+    scrollbar-gutter: stable;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding-right: 8px;
+}
+
+.fillings::-webkit-scrollbar {
     width: 8px;
 }
 
-.ingredientsContainer::-webkit-scrollbar-track {
+.fillings::-webkit-scrollbar-track {
     background: #2F2F37;
 }
 
-.ingredientsContainer::-webkit-scrollbar-thumb {
+.fillings::-webkit-scrollbar-thumb {
     background: #8585AD;
-    height: 492px;
+    height: 292px;
 }
 
 @media (max-height: 1000px) {
-    .ingredientsContainer::-webkit-scrollbar-thumb {
+    .fillings::-webkit-scrollbar-thumb {
         background: #8585AD;
-        height: 400px;
+        height: 292px;
     }
 }
 
 @media (max-height: 900px) {
-    .ingredientsContainer::-webkit-scrollbar-thumb {
-        height: 300px;
+    .fillings::-webkit-scrollbar-thumb {
+        height: 252px;
     }
 }
 
 @media (max-height: 800px) {
-    .ingredientsContainer::-webkit-scrollbar-thumb {
+    .fillings::-webkit-scrollbar-thumb {
         height: 200px;
     }
+}
+
+@media (max-height: 700px) {
+    .fillings::-webkit-scrollbar-thumb {
+        height: 152px;
+    }
+}
+.noCompoundText {
+  margin: auto;
+    text-align: center;
+    opacity: 0.5;
+}
+.middleConstructor > div {
+    width: 536px;
 }
