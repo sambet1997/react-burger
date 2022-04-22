@@ -25,8 +25,13 @@ const Main = ({ ingredients }) => {
     </div>
   );
 };
+
+Main.defaultProps = {
+  ingredients: [],
+};
+
 Main.propTypes = {
-  ingredients: PropTypes.array,
+  ingredients: PropTypes.array.isRequired,
 };
 
 export default Main;

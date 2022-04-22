@@ -1,7 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    min-width: 33.93vw;
+    width: 600px;
     justify-content: space-between;
     margin-top: 100px;
     margin-right: 16px;
@@ -20,11 +20,6 @@
     display: flex;
     align-items: center;
     margin: 8px 0;
-}
-
-.constructorElement > div {
-    width: 29.91vw;
-    min-width: 475px;
 }
 
 .order {
@@ -59,11 +54,6 @@
 
 .buns:last-child {
     margin-bottom: -8px;
-}
-
-.buns > div {
-    width: 29.91vw;
-    min-width: 475px;
 }
 
 .fillings {
@@ -110,4 +100,9 @@
     .fillings::-webkit-scrollbar-thumb {
         height: 152px;
     }
+}
+.noCompoundText {
+  margin: auto;
+    text-align: center;
+    opacity: 0.5;
 }

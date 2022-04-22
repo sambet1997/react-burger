@@ -39,21 +39,15 @@ const BurgerIngredients = ({ compound, setCompound }) => {
       {!compound.buns._id &&
         !compound.sauces.length &&
         !compound.fillings.length && (
-          <p
-            style={{
-              margin: "auto",
-              textAlign: "center",
-              opacity: 0.5,
-              width: "39.3vw",
-            }}
-            className="text text_type_main-large"
-          >
+          <p className={`text text_type_main-large ${styles.noCompoundText}`}>
             Вы не выбрали ни одного ингредиента
           </p>
         )}
-      {(compound.buns._id ||
+      {!!(
+        compound.buns._id ||
         compound.sauces.length ||
-        compound.fillings.length) && (
+        compound.fillings.length
+      ) && (
         <>
           <div className={styles.constructorsContainer}>
             {compound && compound.buns && compound.buns._id && (
@@ -114,9 +108,15 @@ const BurgerIngredients = ({ compound, setCompound }) => {
     </div>
   );
 };
+
+BurgerIngredients.defaultProps = {
+  compound: {},
+  setCompound: () => {},
+};
+
 BurgerIngredients.propTypes = {
-  compound: PropTypes.instanceOf(Object),
-  setCompound: PropTypes.func,
+  compound: PropTypes.instanceOf(Object).isRequired,
+  setCompound: PropTypes.func.isRequired,
 };
 
 export default BurgerIngredients;

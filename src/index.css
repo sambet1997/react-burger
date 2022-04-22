@@ -1,0 +1,7 @@
+a, a:visited, a:hover, a:active {
+    color: transparent;
+}
+body, #root, html {
+    height: 100%;
+    overflow: hidden;
+}
