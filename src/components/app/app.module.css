@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    height: 100%;
+    overflow: hidden;
+}
+a, a:visited, a:hover, a:active {
+    color: transparent;
+}
+body, #root, html {
+    height: 100%;
+    overflow: hidden;
+}

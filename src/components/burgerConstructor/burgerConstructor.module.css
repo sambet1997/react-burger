@@ -1,0 +1,111 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    justify-content: space-between;
+    margin-top: 100px;
+    margin-right: 16px;
+    max-width: 608px;
+}
+
+.constructorsContainer {
+    max-height: calc(100% - 90px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.constructor {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.order {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.price {
+    align-items: center;
+    display: flex;
+}
+
+.logo {
+    display: flex;
+}
+
+.logo > svg {
+    width: 33px;
+    height: 33px;
+    margin-right: 40px;
+}
+
+.buns {
+    padding-right: 16px;
+}
+
+.buns:first-child {
+    margin-top: 8px;
+}
+
+.buns:last-child {
+    margin-bottom: -8px;
+}
+
+.fillings {
+    scrollbar-gutter: stable;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding-right: 8px;
+}
+
+.fillings::-webkit-scrollbar {
+    width: 8px;
+}
+
+.fillings::-webkit-scrollbar-track {
+    background: #2F2F37;
+}
+
+.fillings::-webkit-scrollbar-thumb {
+    background: #8585AD;
+    height: 292px;
+}
+
+@media (max-height: 1000px) {
+    .fillings::-webkit-scrollbar-thumb {
+        background: #8585AD;
+        height: 292px;
+    }
+}
+
+@media (max-height: 900px) {
+    .fillings::-webkit-scrollbar-thumb {
+        height: 252px;
+    }
+}
+
+@media (max-height: 800px) {
+    .fillings::-webkit-scrollbar-thumb {
+        height: 200px;
+    }
+}
+
+@media (max-height: 700px) {
+    .fillings::-webkit-scrollbar-thumb {
+        height: 152px;
+    }
+}
+.noCompoundText {
+  margin: auto;
+    text-align: center;
+    opacity: 0.5;
+}
+.middleConstructor > div {
+    width: 536px;
+}
