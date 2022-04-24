@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   ConstructorElement,
@@ -7,8 +7,15 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burgerConstructor.module.css";
 import PropTypes from "prop-types";
+import OrderDetails from "./orderDetails";
+import IngredientDetails from "./ingredientDetails";
+import { ingredientsPropTypes } from "../../pages/main/types";
 
 const BurgerConstructor = ({ compound, setCompound }) => {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isOrder, setIsOrder] = useState(false);
+  const [ingredientInfo, setIngredientInfo] = useState({});
+
   function totalPrice(obj, key) {
     let fieldIterator = JSON.stringify(obj).matchAll(
       '(?<="' + key + '":)[0-9]*'
@@ -22,7 +29,9 @@ const BurgerConstructor = ({ compound, setCompound }) => {
     return result;
   }
 
-  const handleDelete = (item) => () => {
+  const handleDelete = (item) => (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     setCompound({
       buns: compound.buns,
 
@@ -51,7 +60,13 @@ const BurgerConstructor = ({ compound, setCompound }) => {
         <>
           <div className={styles.constructorsContainer}>
             {compound && compound.buns && compound.buns._id && (
-              <div className={styles.buns}>
+              <div
+                className={styles.buns}
+                onClick={() => {
+                  setIsDetailsOpen(true);
+                  setIngredientInfo(compound.buns);
+                }}
+              >
                 <ConstructorElement
                   type="top"
                   isLocked={true}
@@ -67,7 +82,13 @@ const BurgerConstructor = ({ compound, setCompound }) => {
                   <div className="mr-2">
                     <DragIcon type="primary" />
                   </div>
-                  <div className={styles.middleConstructor}>
+                  <div
+                    className={styles.middleConstructor}
+                    onClick={() => {
+                      setIsDetailsOpen(true);
+                      setIngredientInfo(item);
+                    }}
+                  >
                     <ConstructorElement
                       text={item.name}
                       price={item.price}
@@ -79,7 +100,13 @@ const BurgerConstructor = ({ compound, setCompound }) => {
               ))}
             </div>
             {compound && compound.buns && compound.buns._id && (
-              <div className={styles.buns}>
+              <div
+                className={styles.buns}
+                onClick={() => {
+                  setIsDetailsOpen(true);
+                  setIngredientInfo(compound.buns);
+                }}
+              >
                 <ConstructorElement
                   type="bottom"
                   isLocked={true}
@@ -99,18 +126,40 @@ const BurgerConstructor = ({ compound, setCompound }) => {
                 <CurrencyIcon type="primary" />
               </div>
             </div>
-            <Button type="primary" size="large">
+            <Button
+              type="primary"
+              size="large"
+              onClick={() => setIsOrder(true)}
+            >
               Оформить заказ
             </Button>
           </div>
         </>
       )}
+      <OrderDetails isOrder={isOrder} handleClose={() => setIsOrder(false)} />
+      <IngredientDetails
+        ingredientInfo={ingredientInfo}
+        isDetailsOpen={isDetailsOpen}
+        handleClose={() => setIsDetailsOpen(false)}
+      />
     </div>
   );
 };
 
+BurgerConstructor.defaultProps = {
+  buns: {},
+  sauces: [],
+  fillings: [],
+};
+
+const compoundPropTypes = PropTypes.shape({
+  buns: ingredientsPropTypes.isRequired,
+  sauces: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+  fillings: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+});
+
 BurgerConstructor.propTypes = {
-  compound: PropTypes.instanceOf(Object).isRequired,
+  compound: compoundPropTypes,
   setCompound: PropTypes.func.isRequired,
 };
 

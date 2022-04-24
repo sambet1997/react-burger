@@ -30,7 +30,7 @@ const AppHeader = () => {
           </div>
         </div>
         <div className={styles.logo}>
-          <Logo className={styles.logo} />
+          <Logo />
         </div>
         <div className={styles.profile}>
           <div className={styles.headerItem}>

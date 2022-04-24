@@ -13,3 +13,8 @@ body, #root, html {
     height: 100%;
     overflow: hidden;
 }
+.noContent {
+    margin: auto !important;
+    text-align: center;
+    opacity: 0.5;
+}
