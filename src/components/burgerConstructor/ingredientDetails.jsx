@@ -1,23 +1,18 @@
 import React from "react";
-import { Modal } from "../modal/modal";
 import styles from "./burgerConstructor.module.css";
 import PropTypes from "prop-types";
+import Modal from "../modal/modal";
 
-const IngredientDetails = ({ isDetailsOpen, handleClose, ingredientInfo }) => {
+const IngredientDetails = ({
+  isDetailsOpen,
+  handleClose,
+  ingredientInfo,
+  title,
+}) => {
   return (
     <>
-      <Modal
-        className={styles.ingredientsModal}
-        open={isDetailsOpen}
-        handleClose={handleClose}
-        closeIcon
-      >
+      <Modal show={isDetailsOpen} close={handleClose} title={title}>
         <div className={styles.modalContainer}>
-          <p
-            className={`text text_type_main-large mt-8 ml-10 ${styles.ingredientsModalTitle}`}
-          >
-            Детали ингредиента
-          </p>
           <img
             alt="Картинка ингредиента"
             src={ingredientInfo.image_large}
@@ -27,20 +22,20 @@ const IngredientDetails = ({ isDetailsOpen, handleClose, ingredientInfo }) => {
             {ingredientInfo.name}
           </p>
           <div className={styles.pfc}>
-            <div>
-              <p className="text text_type_main-small mr-5">Калории, ккал</p>
+            <div className="mr-5">
+              <p className="text text_type_main-small">Калории, ккал</p>
               <p className="text text_type_digits-default mt-2">
                 {ingredientInfo.calories}
               </p>
             </div>
-            <div>
-              <p className="text text_type_main-small mr-5">Белки, г</p>
+            <div className="mr-5">
+              <p className="text text_type_main-small">Белки, г</p>
               <p className="text text_type_digits-default mt-2">
                 {ingredientInfo.proteins}
               </p>
             </div>
-            <div>
-              <p className="text text_type_main-small mr-5">Жиры, г</p>
+            <div className="mr-5">
+              <p className="text text_type_main-small">Жиры, г</p>
               <p className="text text_type_digits-default mt-2">
                 {ingredientInfo.fat}
               </p>
@@ -62,6 +57,7 @@ IngredientDetails.propTypes = {
   ingredientInfo: PropTypes.instanceOf(Object).isRequired,
   isDetailsOpen: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
+  tittle: PropTypes.string,
 };
 
 export default IngredientDetails;

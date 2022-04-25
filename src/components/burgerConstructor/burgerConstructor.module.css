@@ -135,6 +135,7 @@
 .modalContainer {
     flex-direction: column;
     text-align: center;
+    width: 640px;
 }
 
 .orderIcon {

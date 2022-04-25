@@ -3,10 +3,11 @@ import {
   CurrencyIcon,
   Tab,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./burgerIngredients.module.css";
 import PropTypes from "prop-types";
 import { ingredientsPropTypes } from "../../pages/main/types";
+import IngredientDetails from "../burgerConstructor/ingredientDetails";
 
 const BurgerIngredients = ({ ingredients, compound, setCompound }) => {
   const [current, setCurrent] = React.useState("one");
@@ -15,6 +16,7 @@ const BurgerIngredients = ({ ingredients, compound, setCompound }) => {
   const sauces = useRef(null);
   const fillings = useRef(null);
   const offsetToTitle = 292; // heights: header + tabs + margins (можно и через скрипты посчитать, если что поправлю, пока адаптива нет)
+  const [ingredientInfo, setIngredientInfo] = useState({});
 
   React.useEffect(() => {
     if (ingredients) {
@@ -48,6 +50,8 @@ const BurgerIngredients = ({ ingredients, compound, setCompound }) => {
   }, [compound, setCompound]);
 
   const onClickHandler = (ingredients, currentIngredient) => () => {
+    setIngredientInfo(currentIngredient);
+    setModal(true);
     setCompound({
       ...compound,
       [ingredients.key]:
@@ -94,6 +98,7 @@ const BurgerIngredients = ({ ingredients, compound, setCompound }) => {
     }
     return 0;
   };
+  const [modal, setModal] = useState(false);
 
   return (
     <div className={styles.container}>
@@ -158,6 +163,12 @@ const BurgerIngredients = ({ ingredients, compound, setCompound }) => {
           </div>
         ))}
       </div>
+      <IngredientDetails
+        ingredientInfo={ingredientInfo}
+        isDetailsOpen={modal}
+        handleClose={() => setModal(false)}
+        title="Детали ингредиента"
+      />
     </div>
   );
 };

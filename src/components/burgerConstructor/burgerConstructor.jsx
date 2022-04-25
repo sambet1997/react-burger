@@ -8,13 +8,10 @@ import {
 import styles from "./burgerConstructor.module.css";
 import PropTypes from "prop-types";
 import OrderDetails from "./orderDetails";
-import IngredientDetails from "./ingredientDetails";
 import { ingredientsPropTypes } from "../../pages/main/types";
 
 const BurgerConstructor = ({ compound, setCompound }) => {
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isOrder, setIsOrder] = useState(false);
-  const [ingredientInfo, setIngredientInfo] = useState({});
 
   function totalPrice(obj, key) {
     let fieldIterator = JSON.stringify(obj).matchAll(
@@ -60,13 +57,7 @@ const BurgerConstructor = ({ compound, setCompound }) => {
         <>
           <div className={styles.constructorsContainer}>
             {compound && compound.buns && compound.buns._id && (
-              <div
-                className={styles.buns}
-                onClick={() => {
-                  setIsDetailsOpen(true);
-                  setIngredientInfo(compound.buns);
-                }}
-              >
+              <div className={styles.buns}>
                 <ConstructorElement
                   type="top"
                   isLocked={true}
@@ -82,13 +73,7 @@ const BurgerConstructor = ({ compound, setCompound }) => {
                   <div className="mr-2">
                     <DragIcon type="primary" />
                   </div>
-                  <div
-                    className={styles.middleConstructor}
-                    onClick={() => {
-                      setIsDetailsOpen(true);
-                      setIngredientInfo(item);
-                    }}
-                  >
+                  <div className={styles.middleConstructor}>
                     <ConstructorElement
                       text={item.name}
                       price={item.price}
@@ -100,13 +85,7 @@ const BurgerConstructor = ({ compound, setCompound }) => {
               ))}
             </div>
             {compound && compound.buns && compound.buns._id && (
-              <div
-                className={styles.buns}
-                onClick={() => {
-                  setIsDetailsOpen(true);
-                  setIngredientInfo(compound.buns);
-                }}
-              >
+              <div className={styles.buns}>
                 <ConstructorElement
                   type="bottom"
                   isLocked={true}
@@ -137,11 +116,6 @@ const BurgerConstructor = ({ compound, setCompound }) => {
         </>
       )}
       <OrderDetails isOrder={isOrder} handleClose={() => setIsOrder(false)} />
-      <IngredientDetails
-        ingredientInfo={ingredientInfo}
-        isDetailsOpen={isDetailsOpen}
-        handleClose={() => setIsDetailsOpen(false)}
-      />
     </div>
   );
 };

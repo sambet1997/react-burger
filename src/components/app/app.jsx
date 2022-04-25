@@ -12,6 +12,12 @@ const App = () => {
   const getData = async () => {
     try {
       const res = await fetch(api);
+      if (!res.ok) {
+        // кстати удивлен, что свойство ок есть, не видел никогда, спасибо за инфу :)
+        // но на работе я все это и так в сервисах проверяю, не знаю почему тут не проверил)
+        setIsError(true);
+        throw new Error("Ответ сети был не ok.");
+      }
       const value = await res.json();
       if (value.success) {
         setData(value.data);
