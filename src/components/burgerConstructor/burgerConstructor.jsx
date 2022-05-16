@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   ConstructorElement,
@@ -7,8 +7,12 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burgerConstructor.module.css";
 import PropTypes from "prop-types";
+import OrderDetails from "./orderDetails";
+import { ingredientsPropTypes } from "../../pages/main/types";
 
 const BurgerConstructor = ({ compound, setCompound }) => {
+  const [isOrder, setIsOrder] = useState(false);
+
   function totalPrice(obj, key) {
     let fieldIterator = JSON.stringify(obj).matchAll(
       '(?<="' + key + '":)[0-9]*'
@@ -22,7 +26,9 @@ const BurgerConstructor = ({ compound, setCompound }) => {
     return result;
   }
 
-  const handleDelete = (item) => () => {
+  const handleDelete = (item) => (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     setCompound({
       buns: compound.buns,
 
@@ -99,18 +105,35 @@ const BurgerConstructor = ({ compound, setCompound }) => {
                 <CurrencyIcon type="primary" />
               </div>
             </div>
-            <Button type="primary" size="large">
+            <Button
+              type="primary"
+              size="large"
+              onClick={() => setIsOrder(true)}
+            >
               Оформить заказ
             </Button>
           </div>
         </>
       )}
+      <OrderDetails isOrder={isOrder} handleClose={() => setIsOrder(false)} />
     </div>
   );
 };
 
+BurgerConstructor.defaultProps = {
+  buns: {},
+  sauces: [],
+  fillings: [],
+};
+
+const compoundPropTypes = PropTypes.shape({
+  buns: ingredientsPropTypes.isRequired,
+  sauces: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+  fillings: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+});
+
 BurgerConstructor.propTypes = {
-  compound: PropTypes.instanceOf(Object).isRequired,
+  compound: compoundPropTypes,
   setCompound: PropTypes.func.isRequired,
 };
 

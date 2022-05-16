@@ -13,12 +13,13 @@
     margin: auto;
     box-sizing: border-box;
 }
-.ingredients {
+.constructor {
     display: flex;
     flex-direction: row;
     width: 100%;
 }
 .logo {
+    cursor: pointer;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -35,6 +36,7 @@
     align-items: center;
     height: min-content;
     padding: 16px 0;
+    cursor: pointer;
 }
 .icons {
     align-self: center;
