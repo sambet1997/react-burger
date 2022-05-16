@@ -13,7 +13,7 @@
     margin: auto;
     box-sizing: border-box;
 }
-.ingredients {
+.constructor {
     display: flex;
     flex-direction: row;
     width: 100%;
