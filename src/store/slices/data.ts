@@ -142,6 +142,7 @@ const dataSlice = createSlice({
             return state;
         },
         [set.rejected.type]: (state) => {
+            state.isLoading = false;
             state.error = 'Ошибка';
         },
         [post.fulfilled.type]: (state, action) => {
@@ -151,6 +152,7 @@ const dataSlice = createSlice({
             return state;
         },
         [post.rejected.type]: (state) => {
+            state.isLoading = false;
             state.error = 'Ошибка';
         },
         [post.pending.type]: (state) => {
