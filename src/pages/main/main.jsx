@@ -1,30 +1,36 @@
-import React from "react";
-import BurgerIngredients from "../../components/burgerIngredients/burgerIngredients";
-import BurgerConstructor from "../../components/burgerConstructor/burgerConstructor";
-import styles from "./main.module.css";
-import PropTypes from "prop-types";
-import { ingredientsPropTypes } from "./types";
+import React from 'react';
+import BurgerIngredients from '../../components/burgerIngredients/burgerIngredients';
+import BurgerConstructor from '../../components/burgerConstructor/burgerConstructor';
+import styles from './main.module.css';
+import PropTypes from 'prop-types';
+import { ingredientsPropTypes } from './types';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useSelector } from 'react-redux';
 
-const Main = ({ ingredients }) => {
-  const [compound, setCompound] = React.useState({
-    buns: {},
-    sauces: [],
-    fillings: [],
-  });
-  return (
-    <div className={styles.container}>
-      <BurgerIngredients
-        compound={compound}
-        setCompound={setCompound}
-        ingredients={ingredients}
-      />
-      <BurgerConstructor compound={compound} setCompound={setCompound} />
-    </div>
-  );
+const Main = () => {
+    const ingredients = useSelector((state) => state.data.ingredients);
+    const compound = useSelector((state) => state.data.compound);
+    return (
+        <div className={styles.container}>
+            <DndProvider backend={HTML5Backend}>
+                <BurgerIngredients
+                    compound={compound}
+                    ingredients={ingredients}
+                />
+                {
+                    <BurgerConstructor
+                        compound={compound}
+                        ingredients={ingredients}
+                    />
+                }
+            </DndProvider>
+        </div>
+    );
 };
 
 Main.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientsPropTypes),
+    ingredients: PropTypes.arrayOf(ingredientsPropTypes),
 };
 
 export default Main;

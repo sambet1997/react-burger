@@ -1,140 +1,213 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-  Button,
-  ConstructorElement,
-  CurrencyIcon,
-  DragIcon,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./burgerConstructor.module.css";
-import PropTypes from "prop-types";
-import OrderDetails from "./orderDetails";
-import { ingredientsPropTypes } from "../../pages/main/types";
+    Button,
+    ConstructorElement,
+    CurrencyIcon,
+} from '@ya.praktikum/react-developer-burger-ui-components';
+import styles from './burgerConstructor.module.css';
+import PropTypes from 'prop-types';
+import OrderDetails from './orderDetails';
+import { ingredientsPropTypes } from '../../pages/main/types';
+import { useDispatch } from 'react-redux';
+import { setCompounds, setOrder } from '../../store/slices/data';
+import { useDrop } from 'react-dnd';
+import Constructor from '../constructor/constructor';
 
-const BurgerConstructor = ({ compound, setCompound }) => {
-  const [isOrder, setIsOrder] = useState(false);
+const EKey = {
+    bun: 'buns',
+    sauce: 'sauces',
+    main: 'fillings',
+};
 
-  function totalPrice(obj, key) {
-    let fieldIterator = JSON.stringify(obj).matchAll(
-      '(?<="' + key + '":)[0-9]*'
-    );
-    let it = fieldIterator.next(),
-      result = 0;
-    while (!it.done) {
-      result += it.value[0] - 0;
-      it = fieldIterator.next();
+const BurgerConstructor = ({ compound, ingredients }) => {
+    const [isOrder, setIsOrder] = useState(false);
+    const dispatch = useDispatch();
+
+    function totalPrice(obj, key) {
+        let fieldIterator = JSON.stringify(obj).matchAll(
+            '(?<="' + key + '":)[0-9]*'
+        );
+        let it = fieldIterator.next(),
+            result = 0;
+        while (!it.done) {
+            result += it.value[0] - 0;
+            it = fieldIterator.next();
+        }
+        return result;
     }
-    return result;
-  }
 
-  const handleDelete = (item) => (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    setCompound({
-      buns: compound.buns,
+    const handleDelete = (item) => (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        let tmp = {
+            buns: compound.buns,
 
-      sauces: [...compound.sauces].filter(
-        (ingredient) => ingredient.index !== item.index
-      ),
-      fillings: [...compound.fillings].filter(
-        (ingredient) => ingredient.index !== item.index
-      ),
+            sauces: [...compound.sauces].filter(
+                (ingredient) => ingredient.index !== item.index
+            ),
+            fillings: [...compound.fillings].filter(
+                (ingredient) => ingredient.index !== item.index
+            ),
+        };
+        tmp = {
+            ...tmp,
+            sauces: tmp.sauces.map((el) => {
+                if (el.sort_order > item.sort_order) {
+                    return { ...el, sort_order: el.sort_order - 1 };
+                }
+                return el;
+            }),
+            fillings: tmp.fillings.map((el) => {
+                if (el.sort_order > item.sort_order) {
+                    return { ...el, sort_order: el.sort_order - 1 };
+                }
+                return el;
+            }),
+        };
+        console.log(tmp);
+        dispatch(setCompounds(tmp));
+    };
+    const [{ isHover }, dropTarget] = useDrop({
+        accept: 'ingredient',
+        drop(itemId) {
+            const currentIngredient = ingredients.find(
+                (item) => item._id === itemId.id
+            );
+            dispatch(
+                setCompounds({
+                    ...compound,
+                    [EKey[currentIngredient.type]]:
+                        currentIngredient.type === 'bun'
+                            ? {
+                                  ...currentIngredient,
+                                  price: currentIngredient.price * 2,
+                              }
+                            : compound[EKey[currentIngredient.type]].concat({
+                                  ...currentIngredient,
+                                  index: `${
+                                      compound[EKey[currentIngredient.type]]
+                                          .length
+                                  }-${currentIngredient._id}`,
+                                  sort_order:
+                                      compound.sauces.length +
+                                      compound.fillings.length +
+                                      1,
+                              }),
+                })
+            );
+        },
+        collect: (monitor) => ({
+            isHover: monitor.isOver(),
+        }),
     });
-  };
-  return (
-    <div className={styles.container}>
-      {!compound.buns._id &&
-        !compound.sauces.length &&
-        !compound.fillings.length && (
-          <p className={`text text_type_main-large ${styles.noCompoundText}`}>
-            Вы не выбрали ни одного ингредиента
-          </p>
-        )}
-      {!!(
-        compound.buns._id ||
-        compound.sauces.length ||
-        compound.fillings.length
-      ) && (
-        <>
-          <div className={styles.constructorsContainer}>
-            {compound && compound.buns && compound.buns._id && (
-              <div className={styles.buns}>
-                <ConstructorElement
-                  type="top"
-                  isLocked={true}
-                  text={`${compound.buns.name} (верх)`}
-                  price={compound.buns.price / 2}
-                  thumbnail={compound.buns.image}
-                />
-              </div>
+    const borderColor = isHover ? 'lightgreen' : 'transparent';
+
+    return (
+        <div
+            className={styles.container}
+            ref={dropTarget}
+            style={{ borderColor }}
+        >
+            {!compound.buns._id &&
+                !compound.sauces.length &&
+                !compound.fillings.length && (
+                    <p
+                        className={`text text_type_main-large ${styles.noCompoundText}`}
+                    >
+                        Вы не выбрали ни одного ингредиента
+                    </p>
+                )}
+            {!!(
+                compound.buns._id ||
+                compound.sauces.length ||
+                compound.fillings.length
+            ) && (
+                <>
+                    <div className={styles.constructorsContainer}>
+                        {compound && compound.buns && compound.buns._id && (
+                            <div className={styles.buns}>
+                                <ConstructorElement
+                                    type="top"
+                                    isLocked={true}
+                                    text={`${compound.buns.name} (верх)`}
+                                    price={compound.buns.price / 2}
+                                    thumbnail={compound.buns.image}
+                                />
+                            </div>
+                        )}
+                        <div className={styles.fillings}>
+                            {[...compound.sauces, ...compound.fillings]
+                                .sort((a, b) => a.sort_order - b.sort_order)
+                                .map((item, index) => (
+                                    <Constructor
+                                        index={index}
+                                        item={item}
+                                        handleDelete={handleDelete}
+                                        key={item.index}
+                                    />
+                                ))}
+                        </div>
+                        {compound && compound.buns && compound.buns._id && (
+                            <div className={styles.buns}>
+                                <ConstructorElement
+                                    type="bottom"
+                                    isLocked={true}
+                                    text={`${compound.buns.name} (низ)`}
+                                    price={compound.buns.price / 2}
+                                    thumbnail={compound.buns.image}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <div className={styles.order}>
+                        <div className={styles.price}>
+                            <p className="text text_type_digits-medium mr-2">
+                                {totalPrice(compound, 'price')}
+                            </p>
+                            <div className={styles.logo}>
+                                <CurrencyIcon type="primary" />
+                            </div>
+                        </div>
+                        <Button
+                            type="primary"
+                            size="large"
+                            onClick={() => {
+                                setIsOrder(true);
+                                dispatch(
+                                    setOrder(
+                                        Math.floor(Math.random() * 1000000)
+                                    )
+                                );
+                            }}
+                        >
+                            Оформить заказ
+                        </Button>
+                    </div>
+                </>
             )}
-            <div className={styles.fillings}>
-              {[...compound.sauces, ...compound.fillings].map((item) => (
-                <div className={styles.constructor} key={item.index}>
-                  <div className="mr-2">
-                    <DragIcon type="primary" />
-                  </div>
-                  <div className={styles.middleConstructor}>
-                    <ConstructorElement
-                      text={item.name}
-                      price={item.price}
-                      thumbnail={item.image}
-                      handleClose={handleDelete(item)}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            {compound && compound.buns && compound.buns._id && (
-              <div className={styles.buns}>
-                <ConstructorElement
-                  type="bottom"
-                  isLocked={true}
-                  text={`${compound.buns.name} (низ)`}
-                  price={compound.buns.price / 2}
-                  thumbnail={compound.buns.image}
-                />
-              </div>
-            )}
-          </div>
-          <div className={styles.order}>
-            <div className={styles.price}>
-              <p className="text text_type_digits-medium mr-2">
-                {totalPrice(compound, "price")}
-              </p>
-              <div className={styles.logo}>
-                <CurrencyIcon type="primary" />
-              </div>
-            </div>
-            <Button
-              type="primary"
-              size="large"
-              onClick={() => setIsOrder(true)}
-            >
-              Оформить заказ
-            </Button>
-          </div>
-        </>
-      )}
-      <OrderDetails isOrder={isOrder} handleClose={() => setIsOrder(false)} />
-    </div>
-  );
+            <OrderDetails
+                isOrder={isOrder}
+                handleClose={() => setIsOrder(false)}
+            />
+        </div>
+    );
 };
 
 BurgerConstructor.defaultProps = {
-  buns: {},
-  sauces: [],
-  fillings: [],
+    buns: {},
+    sauces: [],
+    fillings: [],
 };
 
 const compoundPropTypes = PropTypes.shape({
-  buns: ingredientsPropTypes.isRequired,
-  sauces: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
-  fillings: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+    buns: ingredientsPropTypes.isRequired,
+    sauces: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+    fillings: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
 });
 
 BurgerConstructor.propTypes = {
-  compound: compoundPropTypes,
-  setCompound: PropTypes.func.isRequired,
+    compound: compoundPropTypes,
+    ingredients: PropTypes.arrayOf(ingredientsPropTypes),
 };
 
 export default BurgerConstructor;
