@@ -1,30 +1,19 @@
-import React from "react";
-import BurgerIngredients from "../../components/burgerIngredients/burgerIngredients";
-import BurgerConstructor from "../../components/burgerConstructor/burgerConstructor";
-import styles from "./main.module.css";
-import PropTypes from "prop-types";
-import { ingredientsPropTypes } from "./types";
+import React from 'react';
+import BurgerIngredients from '../../components/burgerIngredients/burgerIngredients';
+import BurgerConstructor from '../../components/burgerConstructor/burgerConstructor';
+import styles from './main.module.css';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
-const Main = ({ ingredients }) => {
-  const [compound, setCompound] = React.useState({
-    buns: {},
-    sauces: [],
-    fillings: [],
-  });
-  return (
-    <div className={styles.container}>
-      <BurgerIngredients
-        compound={compound}
-        setCompound={setCompound}
-        ingredients={ingredients}
-      />
-      <BurgerConstructor compound={compound} setCompound={setCompound} />
-    </div>
-  );
-};
-
-Main.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientsPropTypes),
+const Main = () => {
+    return (
+        <div className={styles.container}>
+            <DndProvider backend={HTML5Backend}>
+                <BurgerIngredients />
+                <BurgerConstructor />
+            </DndProvider>
+        </div>
+    );
 };
 
 export default Main;
