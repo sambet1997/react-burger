@@ -86,6 +86,29 @@ export const set = createAsyncThunk('data/setIngredients', async () => {
     }
 });
 
+const postApi = 'https://norma.nomoreparties.space/api/orders';
+
+export const post = createAsyncThunk('data/postCompound', async (data: any) => {
+    try {
+        const res = await fetch(postApi, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!res.ok) {
+            throw new Error('Ответ сети был не ok.');
+        }
+        const value = await res.json();
+        if (value.success) {
+            return value.order.number;
+        }
+    } catch (err) {
+        throw new Error('Error.');
+    }
+});
+
 const dataSlice = createSlice({
     name: 'data',
     initialState,
@@ -120,6 +143,19 @@ const dataSlice = createSlice({
         },
         [set.rejected.type]: (state) => {
             state.error = 'Ошибка';
+        },
+        [post.fulfilled.type]: (state, action) => {
+            state.isLoading = false;
+            state.error = null;
+            state.order = action.payload;
+            return state;
+        },
+        [post.rejected.type]: (state) => {
+            state.error = 'Ошибка';
+        },
+        [post.pending.type]: (state) => {
+            state.isLoading = true;
+            state.error = null;
         },
     },
 });

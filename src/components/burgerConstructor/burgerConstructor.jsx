@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import OrderDetails from './orderDetails';
 import { ingredientsPropTypes } from '../../pages/main/types';
 import { useDispatch } from 'react-redux';
-import { setCompounds, setOrder } from '../../store/slices/data';
+import { setCompounds, setOrder, post } from '../../store/slices/data';
 import { useDrop } from 'react-dnd';
 import Constructor from '../constructor/constructor';
 
@@ -177,6 +177,13 @@ const BurgerConstructor = ({ compound, ingredients }) => {
                                     setOrder(
                                         Math.floor(Math.random() * 1000000)
                                     )
+                                );
+                                dispatch(
+                                    post({
+                                        ingredients: Object.values(compound)
+                                            .flat(1)
+                                            .map((item) => item._id),
+                                    })
                                 );
                             }}
                         >
