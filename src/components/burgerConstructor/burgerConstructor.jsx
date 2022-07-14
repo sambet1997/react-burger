@@ -5,10 +5,8 @@ import {
     CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burgerConstructor.module.css';
-import PropTypes from 'prop-types';
 import OrderDetails from './orderDetails';
-import { ingredientsPropTypes } from '../../pages/main/types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCompounds, setOrder, post } from '../../store/slices/data';
 import { useDrop } from 'react-dnd';
 import Constructor from '../constructor/constructor';
@@ -19,7 +17,9 @@ const EKey = {
     main: 'fillings',
 };
 
-const BurgerConstructor = ({ compound, ingredients }) => {
+const BurgerConstructor = () => {
+    const ingredients = useSelector((state) => state.data.ingredients);
+    const compound = useSelector((state) => state.data.compound);
     const [isOrder, setIsOrder] = useState(false);
     const dispatch = useDispatch();
 
@@ -143,7 +143,7 @@ const BurgerConstructor = ({ compound, ingredients }) => {
                                         index={index}
                                         item={item}
                                         handleDelete={handleDelete}
-                                        key={item.index}
+                                        key={item.index} // Это составленный мною индекс, он и так уникален, строка 87.
                                     />
                                 ))}
                         </div>
@@ -198,23 +198,6 @@ const BurgerConstructor = ({ compound, ingredients }) => {
             />
         </div>
     );
-};
-
-BurgerConstructor.defaultProps = {
-    buns: {},
-    sauces: [],
-    fillings: [],
-};
-
-const compoundPropTypes = PropTypes.shape({
-    buns: ingredientsPropTypes.isRequired,
-    sauces: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
-    fillings: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
-});
-
-BurgerConstructor.propTypes = {
-    compound: compoundPropTypes,
-    ingredients: PropTypes.arrayOf(ingredientsPropTypes),
 };
 
 export default BurgerConstructor;

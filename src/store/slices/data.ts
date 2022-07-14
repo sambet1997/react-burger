@@ -68,15 +68,18 @@ const initialState: ingredientsState = {
     isLoading: false,
     error: null,
 };
+const baseUrl = `https://norma.nomoreparties.space/api`;
 
-const api = `https://norma.nomoreparties.space/api/ingredients`;
+const checkResponse = (res: Response) => {
+    if (!res.ok) {
+        throw new Error('Ответ сети был не ok.');
+    }
+};
 
 export const set = createAsyncThunk('data/setIngredients', async () => {
     try {
-        const res = await fetch(api);
-        if (!res.ok) {
-            throw new Error('Ответ сети был не ok.');
-        }
+        const res = await fetch(`${baseUrl}/ingredients`);
+        checkResponse(res);
         const value = await res.json();
         if (value.success) {
             return value.data;
@@ -86,20 +89,16 @@ export const set = createAsyncThunk('data/setIngredients', async () => {
     }
 });
 
-const postApi = 'https://norma.nomoreparties.space/api/orders';
-
 export const post = createAsyncThunk('data/postCompound', async (data: any) => {
     try {
-        const res = await fetch(postApi, {
+        const res = await fetch(`${baseUrl}/orders`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
             },
         });
-        if (!res.ok) {
-            throw new Error('Ответ сети был не ok.');
-        }
+        checkResponse(res);
         const value = await res.json();
         if (value.success) {
             return value.order.number;

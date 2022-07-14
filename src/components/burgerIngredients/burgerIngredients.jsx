@@ -1,10 +1,8 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useRef, useState } from 'react';
 import styles from './burgerIngredients.module.css';
-import PropTypes from 'prop-types';
-import { ingredientsPropTypes } from '../../pages/main/types';
 import IngredientDetails from '../burgerConstructor/ingredientDetails';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     removeIngredientsInfo,
     setCompounds,
@@ -12,7 +10,9 @@ import {
 } from '../../store/slices/data';
 import Ingredient from '../ingredient/ingredient';
 
-const BurgerIngredients = ({ ingredients, compound }) => {
+const BurgerIngredients = () => {
+    const ingredients = useSelector((state) => state.data.ingredients);
+    const compound = useSelector((state) => state.data.compound);
     const dispatch = useDispatch();
     const [current, setCurrent] = React.useState('one');
     const [data, setData] = React.useState([]);
@@ -51,7 +51,7 @@ const BurgerIngredients = ({ ingredients, compound }) => {
 
     React.useEffect(() => {
         dispatch(setCompounds(compound));
-    }, [compound]);
+    }, [compound, dispatch]);
 
     const onClickHandler = (ingredients, currentIngredient) => () => {
         setIngredientInfo(currentIngredient);
@@ -160,17 +160,6 @@ const BurgerIngredients = ({ ingredients, compound }) => {
             />
         </div>
     );
-};
-
-const compoundPropTypes = PropTypes.shape({
-    buns: ingredientsPropTypes.isRequired,
-    sauces: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
-    fillings: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
-});
-
-BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientsPropTypes),
-    compound: compoundPropTypes.isRequired,
 };
 
 export default BurgerIngredients;

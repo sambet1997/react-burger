@@ -7,6 +7,8 @@ import {
 import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCompounds } from '../../store/slices/data';
+import PropTypes from 'prop-types';
+import { ingredientsPropTypes } from '../../pages/main/types';
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -71,6 +73,12 @@ const Constructor = ({ item, handleDelete, index }) => {
             </div>
         </div>
     );
+};
+
+Constructor.propTypes = {
+    item: ingredientsPropTypes.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    index: PropTypes.number.isRequired,
 };
 
 export default Constructor;
